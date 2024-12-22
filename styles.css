@@ -1,0 +1,263 @@
+@font-face {
+    font-family: PixelMplus10 Regular;
+    src: url('https://cdn.leafscape.be/PixelMplus/PixelMplus10-Regular_web.woff2')
+         format("woff2");
+}
+body {
+    background-color: #303028;
+    font-size: 1.2em;
+    color: #EFEFE7;
+    font-family: 'PixelMplus10 Regular';
+    margin: 0 0 7em;
+    text-align: center;
+}
+textarea,
+input[type="text"] {
+    background: transparent;
+    color: #EFEFE7;
+    font-family: 'PixelMplus10 Regular';
+    font-size: 1em;
+    border: none;
+    field-sizing: content;
+    min-width: 1em;
+}
+textarea {
+    resize: none;
+    text-align: center;
+    line-height: 1.3em;
+    padding: 0;
+}
+textarea + div {
+    line-height: 1.3em;
+}
+.card {
+    padding: 1em;
+    display: inline-grid;
+}
+.buttons {
+    padding: 0 1em;
+}
+.column {
+    display: grid;
+}
+.card, .column {
+    gap: 3px;
+}
+.block {
+    background-color: #303028;
+    border: 4px solid #EFEFE7;
+    border-radius: 7px;
+    box-shadow: 0 0 0 1.5px #303028;
+}
+.block p, .block span {
+    margin: 0;
+    line-height: 1.3em;
+}
+
+/* メッセージとメニューを含む親ボックス */
+.interface-panel {
+    display: inline-grid;
+    grid-template-columns: 8em 1fr;
+    position: fixed;
+    left: 0.5em;
+    bottom: 0.5em;
+    right: 0.5em;
+    z-index: 10;
+    max-width: 30em;
+    min-height: 5.8em;
+    margin: 0 auto;
+    gap: 0 3px;
+}
+
+.menu {
+    position: relative;
+}
+
+.menu-list,
+.submenu {
+    padding: 0.2em 1.2em 0.2em 0.5em;
+    list-style: none;
+    margin: 0;
+}
+
+.menu-list.disabled {
+    pointer-events: none;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #EFEFE7;
+    white-space: nowrap;
+}
+
+.menu-item,
+.message-content .message-text {
+    line-height: 1.5em;
+    text-align: left;
+}
+
+.menu-item .menu-arrow {
+    margin-right: 0.4em;
+    visibility: hidden;
+    font-size: 0.7em;
+}
+
+.menu-item:hover > span > .menu-arrow,
+.menu-item.active > span > .menu-arrow {
+    visibility: visible;
+}
+
+.menu.disabled .menu-item:hover > span > .menu-arrow {
+    visibility: hidden;
+}
+
+.menu, .messages {
+    display: grid;
+    box-shadow: 0 0 5px 2px #303028;
+    border-radius: 6px;
+}
+
+.menu-item {
+    cursor: pointer;
+    color: #EFEFE7;
+    margin: 5px 0;
+}
+
+.submenu {
+    top: auto;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 100;
+    position: absolute;
+}
+
+.message-content {
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    padding: 0.2em 0.5em;
+}
+.message-prefix {
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+.message-text {
+    white-space: pre-wrap;
+}
+
+.right-column {
+    grid-template-rows: auto 1fr;
+}
+.name-block, .left-stat-block, .equipment-block, .money-block, .right-stat-block, .skill-block, .skill-category {
+    padding: 0.2em 0.5em;
+}
+.name-block, .left-stat-block {
+    text-align: center;
+}
+.name-block {
+    border-bottom: 2px solid #EFEFE7;
+}
+.left-stat-block > p {
+    line-height: 1em;
+}
+.stat-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.stat-table th, .stat-table td {
+    padding: 0.1em 0;
+}
+.stat-table th br, .stat-table td br {
+    display: none;
+}
+.stat-table th {
+    text-align: right;
+    font-weight: normal;
+    white-space: nowrap;
+}
+.stat-table th::after {
+    content: "：";
+    position: relative;
+    left: -0.5em;
+}
+.stat-table td, .money-block p {
+    text-align: right;
+}
+.stat-table td::after {
+    content: attr(data-item);
+    font-size: 0.8em;
+    color: #90b7ff;
+}
+.equipment-block {
+    text-align: left;
+}
+.right-stat-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.right-stat-block .ex-container th {
+    width: 2.5em;
+}
+.skill-block {
+    grid-column: span 2;
+    margin-top: 0.3em;
+}
+.skill-categories {
+    grid-column: span 2;
+    margin-top: 0.2em;
+}
+.skill-category {
+    position: relative;
+    padding-top: 1.2em;
+    margin-top: 0.4em;
+}
+.skill-category-title {
+    position: absolute;
+    top: -0.3em;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    text-align: center;
+}
+.skill-category-title input{
+    background: #303028;
+}
+.skill-list {
+    display: grid;
+    padding: 0;
+    margin: 0;
+    gap: 0.3em 0.7em;
+}
+.skill-list li {
+    list-style-type: none;
+    text-align: left;
+    white-space: nowrap;
+}
+.skill-list li::before {
+    content: attr(data-item);
+    color: red;
+    font-size: 0.8em;
+    position: relative;
+    top: 50%;
+}
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modal-content {
+    background: white;
+    padding: 1em;
+    border-radius: 5px;
+    text-align: center;
+}

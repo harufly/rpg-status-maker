@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG Status Maker | 簡単にRPG風ステータスを作成できるツール</title>
+    <meta name="description" content="RPG Status Makerは、簡単にRPG風のキャラクターステータスを作成できるオンラインツールです。冒険者や勇者のプロファイルを自由にカスタマイズし、画像やJSON形式で保存できます。">
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body x-data="statusManager" x-init="init()">
+    <!-- ステータス -->
+    <div id="statusCard" class="card">
+        <div class="column left-column">
+            <div class="block">
+                <div class="name-block">
+                    <p @click="focusChild($focus)">
+                        <input type="text" class="name" x-model="status.name"
+                               @focus="setMsg($el)" @blur="resetMsg()">
+                    </p>
+                </div>
+                <div class="left-stat-block">
+                    <p @click="focusChild($focus)">
+                        <textarea class="occupation" x-model="status.occupation"
+                                  @focus="setMsg($el)" @blur="resetMsg()"></textarea>
+                    </p>
+                    <table class="stat-table" @keydown="handleKeydown(status.stats.basic, $event, $focus)">
+                        <template x-for="(stat, index) in status.stats.basic" :key="index">
+                            <tr>
+                                <th @click="focusChild($focus)">
+                                    <input type="text" class="stat-key" x-model="stat.key" :data-index="index"
+                                           @focus="setMsg($el)" @input="setMsg($el)" @blur="resetMsg()">
+                                </th>
+                                <td @click="focusChild($focus)">
+                                    <input type="text" class="stat-value" x-model="stat.value" :data-index="index"
+                                           @focus="setMsg($el)" @input="setMsg($el)" @blur="resetMsg()">
+                                </td>
+                            </tr>
+                        </template>
+                    </table>
+                </div>
+            </div>
+            <div class="block equipment-block" @keydown="handleKeydown(status.equipmentList, $event, $focus)">
+                <template x-for="(item, index) in status.equipmentList" :key="index">
+                    <p @click="focusChild($focus)">
+                        <input type="text" class="equipment-item" x-model="item" :data-index="index"
+                               @focus="setMsg($el)" @input="setMsg($el)" @blur="resetMsg()">
+                    </p>
+                </template>
+            </div>
+        </div>
+        <div class="column right-column">
+            <div class="block money-block">
+                <p @click="focusChild($focus)">
+                    <input type="text" class="money" x-model="status.money"
+                           @focus="setMsg($el)" @input="setMsg($el)" @blur="resetMsg()">
+                </p>
+            </div>
+            <div class="block right-stat-block">
+                <table class="stat-table" @keydown="handleKeydown(status.stats.detail, $event, $focus)">
+                    <template x-for="(stat, index) in status.stats.detail" :key="index">
+                        <tr>
+                            <th @click="focusChild($focus)">
+                                <input type="text" class="stat-key" x-model="stat.key" :data-index="index"
+                                       @focus="setMsg($el)" @input="setMsg($el)" @blur="resetMsg()">
+                            </th>
+                            <td @click="focusChild($focus)">
+                                <input type="text" class="stat-value" x-model="stat.value" :data-index="index"
+                                       @focus="setMsg($el)" @input="setMsg($el)" @blur="resetMsg()">
+                            </td>
+                        </tr>
+                    </template>
+                </table>
+                <div class="ex-container">
+                    <table class="stat-table">
+                        <tr>
+                            <th @click="focusChild($focus)">
+                                <input type="text" class="stat-key" x-model="status.stats.sum.key"
+                                       @focus="setMsg($el)" @input="setMsg($el)" @blur="resetMsg()">
+                            </th>
+                            <td @click="focusChild($focus)">
+                                <input type="text" class="stat-value" x-model="status.stats.sum.value"
+                                       @focus="setMsg($el)" @input="setMsg($el)" @blur="resetMsg()">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="column skill-categories" @keydown="handleKeydown(status.skills, $event, $focus)">
+            <template x-for="(skill, index) in status.skills" :key="index">
+                <div class="block skill-category">
+                    <div class="skill-category-title">
+                        <input type="text" class="skill-category-name" x-model="skill.key" :data-index="index"
+                               @focus="setMsg($el)" @input="setMsg($el)" @blur="resetMsg()">
+                    </div>
+                    <ul class="skill-list"
+                        x-bind:style="calculateGridStyle(skill.value)"
+                        @keydown="handleKeydown(skill.value, $event, $focus)">
+                        <template x-for="(item, itemIndex) in skill.value" :key="itemIndex">
+                            <li @click="focusChild($focus)">
+                                <input type="text" class="skill-item" x-model="skill.value[itemIndex]" :data-index="itemIndex"
+                                       @focus="setMsg($el)" @input="setMsg($el)" @blur="resetMsg()">
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <!-- 画面下インターフェース -->
+    <div class="interface-panel">
+        <div class="menu" @contextmenu.prevent="handleBack">
+            <!-- メインメニュー -->
+            <ul class="block menu-list" :class="{ 'disabled': currentSubmenu }">
+                <template x-for="item in menuStructure">
+                    <li class="menu-item" :class="{ 'active': activeMenuStack[0] === item.submenu}"
+                        :data-message="item.message" @mouseover="setMsg($el)" @mouseout="resetMsg()">
+                        <span @click="handleMenuClick(item)">
+                            <span class="menu-arrow">▶</span>
+                            <span x-text="item.name"></span>
+                        </span>
+                    </li>
+                </template>
+            </ul>
+            <!-- サブメニュー -->
+            <template x-if="currentSubmenu">
+                <ul class="block submenu">
+                    <template x-for="item in currentSubmenu">
+                        <li class="menu-item"
+                            :data-message="item.message" @mouseover="setMsg($el)" @mouseout="resetMsg()">
+                            <span @click="handleMenuClick(item)">
+                                <span class="menu-arrow">▶</span>
+                                <span x-text="item.name"></span>
+                            </span>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <!-- ファイルアップロード用 -->
+            <input type="file" id="jsonFileInput" accept=".json" style="display: none;" @change="handleJSONFile">
+        </div>
+        <!-- メッセージウインドウ -->
+        <div class="messages">
+            <div class="block message-content">
+                <span class="message-prefix">＊「</span>
+                <span class="message-text" x-text="currentDisplayedMessage"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ダイアログ -->
+    <div x-show="showModal" class="modal">
+        <div class="modal-content">
+            <p x-text="modalMessage"></p>
+            <button @click="confirmModal(true)">はい</button>
+            <button @click="confirmModal(false)">いいえ</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
