@@ -96,9 +96,10 @@ function statusManager() {
                     })
                 }
             }).then(canvas => {
+                const sanitizedFileName = this.sanitizeFileName(this.status.name);
                 document.body.style.textAlign = "initial";
                 let link = document.createElement('a');
-                link.download = 'status.png';
+                link.download = `${sanitizedFileName}.png`;
                 link.href = canvas.toDataURL("image/png");
                 link.click();
         

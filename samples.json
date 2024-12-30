@@ -64,7 +64,7 @@
         ]
     },
     {
-        "name": "魔法少女系",
+        "name": "魔法少女",
         "occupation": "燃え尽きる希望の守護者\n命を灯す戦士",
         "stats": {
             "basic": [
@@ -106,6 +106,69 @@
                     "光焔防壁",
                     "断絶の一撃"
                 ]
+            }
+        ]
+    },
+    {
+        "name": "エンジニア",
+        "occupation": "フルスタックエンジニア\n（バックエンド寄り）",
+        "stats": {
+            "basic": [
+                {"key": "性別", "value": "男性"},
+                {"key": "年齢", "value": "35歳"},
+                {"key": "前職年収", "value": "550万円"},
+                {"key": "配偶者", "value": "なし"}
+            ],
+            "detail": [
+                {"key": "Python", "value": "5年"},
+                {"key": "Django", "value": "4年"},
+                {"key": "TypeScript", "value": "3年"},
+                {"key": "React", "value": "3年"},
+                {"key": "Node.js", "value": "3年"},
+                {"key": "Rust", "value": "1年"}
+            ],
+            "sum": {"key": "エンジニア経験", "value": "10年"}
+        },
+        "equipmentList": [
+            "普通自動車運転免許",
+            "基本情報技術者",
+            "Python 3 認定基礎試験",
+            "Microsoft Azure Fundamentals"
+        ],
+        "money": "希望年収: 600万円",
+        "skills": [
+            {
+                "key": "職務履歴",
+                "value": [
+                    "株式会社InnovateAI（2022年7月 - 現在）",
+                    "株式会社TechWorks（2019年1月 - 2022年6月）",
+                    "株式会社NextWaveTech（2015年4月 - 2018年12月）",
+                    "株式会社CodeCraft（2012年4月 - 2015年3月）"
+                ]
+            },
+            {
+                "key": "プロジェクト履歴",
+                "value": [
+                    "リアルタイムチャットアプリ（2022年8月 - 2024年12月）",
+                    "　概要: リアルタイム通信を実現するチャットアプリの開発",
+                    "　使用技術: Rust, WebSocket, MongoDB",
+                    "在庫管理システム（2020年7月 - 2021年12月）",
+                    "　概要: 中規模企業向け在庫管理システムの設計と実装",
+                    "　使用技術: Node.js, Express, MySQL",
+                    "ECサイト開発（2019年1月 - 2020年6月）",
+                    "　概要: 大規模ECサイトのフロントエンド設計と実装",
+                    "　使用技術: React, GraphQL, Docker",
+                    "金融系バックエンドシステム（2016年7月 - 2018年12月）",
+                    "　概要: 銀行向けシステムのバックエンドAPI開発",
+                    "　使用技術: Python, Django, PostgreSQL",
+                    "顧客管理ツール（2015年4月 - 2016年6月）",
+                    "　概要: 顧客情報の統合管理と分析ツールの開発",
+                    "　使用技術: Python, Flask, PostgreSQL"
+                ]
+            },
+            {
+                "key": "経験ツール",
+                "value": ["Git", "VSCode", "JIRA", "Figma", "Postman"]
             }
         ]
     }
