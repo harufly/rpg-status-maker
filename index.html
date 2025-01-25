@@ -45,7 +45,7 @@
             <div class="block equipment-block" @keydown="handleKeydown(status.equipmentList, $event, $focus)">
                 <template x-for="(item, index) in status.equipmentList" :key="index">
                     <p @click="focusChild($focus)">
-                        <input type="text" class="equipment-item" x-model="item" :data-index="index"
+                        <input type="text" class="equipment-item" x-model="status.equipmentList[index]" :data-index="index"
                                @focus="setMsg($el)" @input="setMsg($el)" @blur="resetMsg()">
                     </p>
                 </template>
